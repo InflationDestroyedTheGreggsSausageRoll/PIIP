@@ -1,21 +1,8 @@
-#######################################
-# IMPORTS
-#######################################
-
 from strings_with_arrows import *
+from words import *
 
-import string
 import os
 import math
-
-#######################################
-# CONSTANTS
-#######################################
-
-DIGITS = '0123456789'
-LETTERS = string.ascii_letters
-LETTERS_DIGITS = LETTERS + DIGITS
-
 
 #######################################
 # ERRORS
@@ -103,53 +90,6 @@ class Position:
 #######################################
 # TOKENS
 #######################################
-
-TT_INT = 'INT'
-TT_FLOAT = 'FLOAT'
-TT_STRING = 'STRING'
-TT_IDENTIFIER = 'IDENTIFIER'
-TT_KEYWORD = 'KEYWORD'
-TT_PLUS = 'PLUS'
-TT_MINUS = 'MINUS'
-TT_MUL = 'MUL'
-TT_DIV = 'DIV'
-TT_POW = 'POW'
-TT_EQ = 'EQ'
-TT_LPAREN = 'LPAREN'
-TT_RPAREN = 'RPAREN'
-TT_LSQUARE = 'LSQUARE'
-TT_RSQUARE = 'RSQUARE'
-TT_EE = 'EE'
-TT_NE = 'NE'
-TT_LT = 'LT'
-TT_GT = 'GT'
-TT_LTE = 'LTE'
-TT_GTE = 'GTE'
-TT_COMMA = 'COMMA'
-TT_ARROW = 'ARROW'
-TT_NEWLINE = 'NEWLINE'
-TT_EOF = 'EOF'
-
-KEYWORDS = [
-    'VAR',
-    'AND',
-    'OR',
-    'NOT',
-    'IF',
-    'ELIF',
-    'ELSE',
-    'FOR',
-    'TO',
-    'STEP',
-    'WHILE',
-    'FUN',
-    'THEN',
-    'END',
-    'RETURN',
-    'CONTINUE',
-    'BREAK',
-]
-
 
 class Token:
     def __init__(self, type_, value=None, pos_start=None, pos_end=None):
@@ -897,7 +837,8 @@ class Parser:
             if res.error:
                 return res.failure(InvalidSyntaxError(
                     self.current_tok.pos_start, self.current_tok.pos_end,
-                    "Expected ']', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', '[' or 'NOT'"
+                    "Expected ']', 'VAR', 'IF', 'FOR', 'WHILE', 'FUN', int, float, identifier, '+', '-', '(', "
+                    "'[' or 'NOT'"
                 ))
 
             while self.current_tok.type == TT_COMMA:
@@ -2201,7 +2142,8 @@ class Interpreter:
             i += step_value.value
 
             value = res.register(self.visit(node.body_node, context))
-            if res.should_return() and res.loop_should_continue == False and res.loop_should_break == False: return res
+            if res.should_return() and res.loop_should_continue is False and res.loop_should_break is False:
+                return res
 
             if res.loop_should_continue:
                 continue
@@ -2229,7 +2171,8 @@ class Interpreter:
                 break
 
             value = res.register(self.visit(node.body_node, context))
-            if res.should_return() and res.loop_should_continue == False and res.loop_should_break == False: return res
+            if res.should_return() and res.loop_should_continue is False and res.loop_should_break is False:
+                return res
 
             if res.loop_should_continue:
                 continue
